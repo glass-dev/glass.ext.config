@@ -16,7 +16,8 @@ import sys
 from collections import UserDict
 from typing import Any
 
-from numpy.typing import ArrayLike
+import numpy as np
+from numpy.typing import ArrayLike, DTypeLike
 
 from cosmology import Cosmology
 from glass.shells import RadialWindow
@@ -79,7 +80,7 @@ class Config(UserDict):
         return value
 
     def getbool(self, key: str,
-                default: str | None | NoDefaultType = NoDefault,
+                default: bool | None | NoDefaultType = NoDefault,
                 ) -> bool:
         choices = ["true", "false"]
         return self.get(key, default, converter=parse_bool, choices=choices)
@@ -104,6 +105,15 @@ class Config(UserDict):
                  choices: list[float] | None = None,
                  ) -> float:
         return self.get(key, default, converter=float, choices=choices)
+
+    def getarray(self, dtype: DTypeLike, key: str,
+                 default: ArrayLike | None | NoDefaultType = NoDefault,
+                 ) -> ArrayLike:
+        def converter(s: str) -> ArrayLike:
+            s = s.replace("\n", " ")
+            return np.fromstring(s, dtype, sep=",")
+
+        return self.get(key, default, converter=converter)
 
     def getep(self, key: str, group: str | None = None, *,
               optional: bool = False) -> Any:
