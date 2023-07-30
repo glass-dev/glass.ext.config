@@ -50,3 +50,29 @@ def tophat_shells_from_config(config: Config,
     else:
         weight = None
     return tophat_windows(grid, weight=weight)
+
+
+def linear_shells_from_config(config: Config,
+                              cosmo: Cosmology | None = None,
+                              weight: Any | None = None,
+                              ) -> list[RadialWindow]:
+    from glass.shells import linear_windows
+    grid = grid_from_config(config, cosmo)
+    if "shells.weight" in config:
+        weight = weight_from_config(config, cosmo)
+    else:
+        weight = None
+    return linear_windows(grid, weight=weight)
+
+
+def cubic_shells_from_config(config: Config,
+                             cosmo: Cosmology | None = None,
+                             weight: Any | None = None,
+                             ) -> list[RadialWindow]:
+    from glass.shells import cubic_windows
+    grid = grid_from_config(config, cosmo)
+    if "shells.weight" in config:
+        weight = weight_from_config(config, cosmo)
+    else:
+        weight = None
+    return cubic_windows(grid, weight=weight)

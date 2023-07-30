@@ -40,6 +40,8 @@ Issues = "https://github.com/glass-dev/glass.ext.config/issues"
 
 [project.entry-points."glass.shells"]
 tophat = "glass.ext.config.shells:tophat_shells_from_config"
+linear = "glass.ext.config.shells:linear_shells_from_config"
+cubic = "glass.ext.config.shells:cubic_shells_from_config"
 
 [project.entry-points."glass.shells.weight"]
 
