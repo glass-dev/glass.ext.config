@@ -50,14 +50,6 @@ class ConfigError(Exception):
             pass
 
 
-def parse_bool(value: str) -> bool:
-    if value == "true":
-        return True
-    if value == "false":
-        return False
-    raise ValueError(f"could not convert string to bool: {value}")
-
-
 class Config(UserDict):
     def get(self, key: str, default: Any = NoDefault, *,
             converter: type | None = None,
@@ -82,8 +74,15 @@ class Config(UserDict):
     def getbool(self, key: str,
                 default: bool | None | NoDefaultType = NoDefault,
                 ) -> bool:
+        def converter(value: str) -> bool:
+            if value == "true":
+                return True
+            if value == "false":
+                return False
+            raise ValueError(f"could not convert string to bool: {value}")
+
         choices = ["true", "false"]
-        return self.get(key, default, converter=parse_bool, choices=choices)
+        return self.get(key, default, converter=converter, choices=choices)
 
     def getstr(self, key: str,
                default: str | None | NoDefaultType = NoDefault,
