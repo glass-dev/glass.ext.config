@@ -51,6 +51,9 @@ distance = "glass.ext.config.shells:distance_grid_from_config"
 [project.entry-points."glass.fields.cls"]
 load = "glass.ext.config.fields:load_cls_from_config"
 
+[project.entry-points."glass.galaxies.dndz"]
+gaussian = "glass.ext.config.galaxies:gaussian_dndz_from_config"
+
 [tool.hatch.version]
 source = "vcs"
 

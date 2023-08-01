@@ -125,6 +125,23 @@ class Config(UserDict):
         ep = next(ep for ep in eps if ep.name == name)
         return ep.load()
 
+    def getrange(self, key: str,
+                 default: ArrayLike | None | NoDefaultType = NoDefault,
+                 ) -> ArrayLike:
+        def converter(s: str) -> ArrayLike:
+            try:
+                which, start, stop, step = s.split()
+            except ValueError:
+                raise ConfigError(f"{key}: range must be of the form 'FUNC "
+                                  "START STOP STEP'") from None
+            if which == "arange":
+                step = float(step)
+            else:
+                step = int(step)
+            return getattr(np, which)(float(start), float(stop), step)
+
+        return self.get(key, default, converter=converter)
+
 
 def cosmo_from_config(config: Config) -> Cosmology:
     _cosmo = config.getep("cosmo.uses", "cosmo")
